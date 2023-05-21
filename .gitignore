@@ -36,3 +36,5 @@ client_data/CreatePositionList.py
 
 Intel_SGX_Attestation_RootCA.pem
 client_data/script/
+build
+ghidra

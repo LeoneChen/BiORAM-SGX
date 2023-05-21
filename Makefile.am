@@ -54,7 +54,7 @@ AM_CXXFLAGS = -std=c++11
 AM_CPPFLAGS += -fno-builtin-memset @OPENSSL_CPPFLAGS@
 
 # IWATA
-DEFAULT_INCLUDES = -I.@am__isrc@ -Isample_libcrypto -I$(SGXSDK)/include
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_srcdir)/sample_libcrypto -I$(SGXSDK)/include
 
 
 ## Additional targets to remove with 'make clean'. You must list
@@ -110,10 +110,10 @@ mrsigner_SOURCES = mrsigner.cpp crypto.c hexutil.c
 ## Extract the enclave SIGSTRUCT and use it to calculate MRSIGNER
 policy: mrsigner policy.in Enclave.signed.so
 	$(SGX_SIGN) dump -cssfile enclave_sigstruct_raw -dumpfile /dev/null -enclave Enclave.signed.so
-	sed -e "s^@MRSIGNER@^`./mrsigner.sh enclave_sigstruct_raw`^" policy.in > policy
+	sed -e "s^@MRSIGNER@^`./mrsigner.sh enclave_sigstruct_raw`^" $(word 2,$^) > policy
 	rm -f enclave_sigstruct_raw
 
-client_LDFLAGS= $(AM_LDFLAGS) @OPENSSL_LDFLAGS@ @CURL_LDFLAGS@
+client_LDFLAGS= $(AM_LDFLAGS) @OPENSSL_LDFLAGS@ @CURL_LDFLAGS@ -Wl,-rpath=$(realpath -s $(top_srcdir))/sample_libcrypto
 mrsigner_LDFLAGS= $(AM_LDFLAGS) @OPENSSL_LDFLAGS@
 
 ## Library flags. At minimum, an Intel SGX application will need:
@@ -138,4 +138,4 @@ mrsigner_LDADD=-lcrypto
 
 # IWATA
 # sp_LDADD=-lcrypto @CURL_LIBS@
-client_LDADD=-lcrypto @CURL_LIBS@ -lsample_libcrypto -Lsample_libcrypto
+client_LDADD=-lcrypto @CURL_LIBS@ -lsample_libcrypto -L$(top_srcdir)/sample_libcrypto

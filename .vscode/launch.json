@@ -1,0 +1,112 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(EncryptAES_SGX) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/dataowner_data/EncryptAES_SGX/app",
+            "args": [
+                "/home/leone/Documents/SGXSan/SGX_APP/BiORAM-SGX/dataowner_data/chr22_GWD/",
+                "22",
+                "GWD",
+                "102000",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/dataowner_data/EncryptAES_SGX",
+            "environment": [],
+            "externalConsole": false,
+            // "MIMode": "gdb",
+            "miDebuggerPath": "/opt/intel/sgxsdk/bin/sgx-gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(client) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/client",
+            "args": [
+                "-s",
+                "BE6BAF2F9613F58F95478A4C3F610A7E",
+                "-i",
+                "",
+                "-j",
+                "",
+                "-A",
+                "/home/leone/Documents/SGXSan/SGX_APP/BiORAM-SGX/Intel_SGX_Attestation_RootCA.pem",
+                "-N",
+                "46384d6670b56f6e80062d6b40181e576d1ac4880f4b09b12bffe892d05579d4",
+                "-V",
+                "1",
+                "-R",
+                "0",
+                "-l",
+                "-d",
+                "-v"
+            ],
+            "stopAtEntry": true,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(SGXserver) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/SGXserver",
+            "args": [
+                "-s",
+                "BE6BAF2F9613F58F95478A4C3F610A7E",
+                "-r",
+                "-l",
+                "-d",
+                "-v"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            // "MIMode": "gdb",
+            "miDebuggerPath": "/opt/intel/sgxsdk/bin/sgx-gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+    ]
+}
