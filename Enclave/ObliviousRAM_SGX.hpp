@@ -10,7 +10,7 @@
 
 
 #ifndef _ObliviousRAM_SGX_hpp
-#define ObliviousRAM_SGX_hpp
+#define _ObliviousRAM_SGX_hpp
 
 #pragma once
 

@@ -11,7 +11,7 @@
 
 
 #ifndef _SGX_Fileio_hpp
-#define SGX_Fileio_hpp
+#define _SGX_Fileio_hpp
 
 #pragma once
 

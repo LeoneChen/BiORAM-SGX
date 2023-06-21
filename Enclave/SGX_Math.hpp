@@ -10,7 +10,7 @@
 
 
 #ifndef _SGX_Math_hpp
-#define SGX_Math_hpp
+#define _SGX_Math_hpp
 
 #pragma once
 
@@ -19,6 +19,7 @@
 #include <sgx_trts.h>
 #include <bitset>
 #include <cmath>
+#include <limits.h>
 
 
 using namespace std;

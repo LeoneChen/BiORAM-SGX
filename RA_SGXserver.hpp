@@ -13,7 +13,7 @@
 
 
 #ifndef _RA_SGXserver_hpp
-#define RA_SGXserver_hpp
+#define _RA_SGXserver_hpp
 
 #include <iostream>
 

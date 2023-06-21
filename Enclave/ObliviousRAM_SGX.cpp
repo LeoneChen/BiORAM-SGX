@@ -2066,8 +2066,8 @@ void ORAM_initialization(int Z_blocks, string& in_topdir, string& in_dirname,
   string cout        = "";
   
   sgx_key_128bit_t AES_SK;
-  ORAM_PositionMap p_map[data_num] = {};
-  ORAM_Stash stash[stash_size] = {};
+  ORAM_PositionMap p_map[data_num];
+  ORAM_Stash stash[stash_size];
   
 
   /*
@@ -2155,8 +2155,8 @@ void ORAM_FileSearch(string dirname, int chrID, string nation, int position)
   ORAM_Search search;
   
   sgx_key_128bit_t AES_SK;
-  ORAM_PositionMap p_map[data_num] = {};
-  ORAM_Stash stash[stash_size]     = {};
+  ORAM_PositionMap p_map[data_num];
+  ORAM_Stash stash[stash_size];
   
   
   cout = "Data Num: " + to_string(data_num) + ", Node: " + to_string(N_node) +
@@ -2285,8 +2285,8 @@ void ORAM_FileSearch_ML(int data_num, int Z_blocks, int chrID, string nation,
   ORAM_Search search;
   
   sgx_key_128bit_t AES_SK;
-  ORAM_PositionMap p_map[data_num] = {};
-  ORAM_Stash stash[stash_size]     = {};
+  ORAM_PositionMap p_map[data_num];
+  ORAM_Stash stash[stash_size];
   
 
 
@@ -2365,8 +2365,8 @@ void ORAM_GetData_Fisher(int chrID, string nation, string topdir, string dirname
   ORAM_Search search;
   
   sgx_key_128bit_t AES_SK;
-  ORAM_PositionMap p_map[data_num] = {};
-  ORAM_Stash stash[stash_size]     = {};
+  ORAM_PositionMap p_map[data_num];
+  ORAM_Stash stash[stash_size];
 
   
 

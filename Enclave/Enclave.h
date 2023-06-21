@@ -1,5 +1,6 @@
 #ifndef __ENCLAVE_QUOTE_H
 #define __ENCLAVE_QUOTE_H
+#include "sgx_spinlock.h"
 
 typedef enum _ra_state
 {
