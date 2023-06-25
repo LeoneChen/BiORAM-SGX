@@ -11,7 +11,7 @@
 
 
 #ifndef _SGX_Print_hpp
-#define SGX_Print_hpp
+#define _SGX_Print_hpp
 
 #pragma once
 

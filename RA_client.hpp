@@ -13,7 +13,7 @@
 
 
 #ifndef _RA_client_hpp
-#define RA_client_hpp
+#define _RA_client_hpp
 
 #pragma once
 

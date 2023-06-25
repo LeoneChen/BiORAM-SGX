@@ -1,3 +1,11 @@
+#if defined(__cplusplus)
+extern "C"{
+#endif
+void SGXSanLogEnter(const char *str);
+#if defined(__cplusplus)
+}
+#define LogEnter SGXSanLogEnter
+#endif
 /*!
  *
  * Enclave.cpp
@@ -17,7 +25,9 @@
 #include "Enclave_t.h"
 #include <string.h>
 #include <sgx_utils.h>
+#ifdef _WIN32
 #include <sgx_tae_service.h>
+#endif
 #include <sgx_tkey_exchange.h>
 #include <sgx_tcrypto.h>
 
@@ -179,6 +189,7 @@ static const sgx_ec256_public_t def_service_public_key = {
 
 sgx_status_t get_report(sgx_report_t *report, sgx_target_info_t *target_info)
 {
+    LogEnter(__func__);
 #ifdef SGX_HW_SIM
   return sgx_create_report(NULL, NULL, report);
 #else
@@ -187,6 +198,7 @@ sgx_status_t get_report(sgx_report_t *report, sgx_target_info_t *target_info)
 }
 
 
+#ifdef _WIN32
 size_t get_pse_manifest_size ()
 {
   return sizeof(sgx_ps_sec_prop_desc_t);
@@ -214,11 +226,13 @@ sgx_status_t get_pse_manifest(char *buf, size_t sz)
   
   return status;
 }
+#endif
 
 
 sgx_status_t enclave_ra_init(sgx_ec256_public_t key, int b_pse,
 			     sgx_ra_context_t *ctx, sgx_status_t *pse_status)
 {
+    LogEnter(__func__);
   sgx_status_t ra_status;
   
   /*
@@ -226,6 +240,7 @@ sgx_status_t enclave_ra_init(sgx_ec256_public_t key, int b_pse,
    * before calling sgx_ra_init()
    */
   
+#ifdef _WIN32
   if ( b_pse ) {
     int retries= PSE_RETRIES;
     do {
@@ -245,6 +260,9 @@ sgx_status_t enclave_ra_init(sgx_ec256_public_t key, int b_pse,
     } while (*pse_status == SGX_ERROR_BUSY && retries--);
     if ( *pse_status != SGX_SUCCESS ) return SGX_ERROR_UNEXPECTED;
   }
+#else
+  ra_status= sgx_ra_init(&key, b_pse, ctx);
+#endif
   
   return ra_status;
 }
@@ -253,6 +271,7 @@ sgx_status_t enclave_ra_init(sgx_ec256_public_t key, int b_pse,
 sgx_status_t enclave_ra_init_def(int b_pse, sgx_ra_context_t *ctx,
 				 sgx_status_t *pse_status)
 {
+    LogEnter(__func__);
 	return enclave_ra_init(def_service_public_key, b_pse, ctx, pse_status);
 }
 
@@ -266,6 +285,7 @@ sgx_status_t enclave_ra_init_def(int b_pse, sgx_ra_context_t *ctx,
 sgx_status_t enclave_ra_get_key_hash(sgx_status_t *get_keys_ret,
 	sgx_ra_context_t ctx, sgx_ra_key_type_t type, sgx_sha256_hash_t *hash)
 {
+    LogEnter(__func__);
 	sgx_status_t sha_ret;
 	sgx_ra_key_128_t k;
 
@@ -305,6 +325,7 @@ void print_hexstring(unsigned char* test, int size){
 sgx_status_t enclave_get_user_key(unsigned char *enc_user_key, size_t enc_user_key_len,
 				  unsigned char *iv, size_t iv_len, sgx_aes_gcm_128bit_tag_t *tag)
 {
+    LogEnter(__func__);
   sgx_status_t ctx;
   sgx_ra_key_128_t k;
   
@@ -333,6 +354,7 @@ sgx_status_t enclave_get_user_key(unsigned char *enc_user_key, size_t enc_user_k
 
 sgx_status_t enclave_ra_close(sgx_ra_context_t ctx)
 {
+    LogEnter(__func__);
   sgx_status_t ret;
   ret = sgx_ra_close(ctx);
   return ret;
@@ -350,7 +372,7 @@ void GetDirectoryInfo(string& in_topdir, string& out_topdir)
   string filename_str = "./BiORAM_settings";
   size_t filename_len = filename_str.length();
 
-  uint8_t filename[filename_len] = {};
+  uint8_t filename[filename_len];
   for(size_t i=0; i<filename_len; i++){
     filename[i] = filename_str[i];
   }
@@ -1051,6 +1073,7 @@ void js_dump(CScriptVar *v, void *userdata)
 
 void cp_source(void *ptr, size_t len)
 {
+    LogEnter(__func__);
   std::string sc = (const char*)ptr;
   printf("%s", sc.c_str());
 }
@@ -1058,6 +1081,7 @@ void cp_source(void *ptr, size_t len)
 
 sgx_status_t JSinterpreter(uint8_t *jscode_clump, int jscode_clump_len, uint8_t *AESkey_clump, int AESkey_clump_len)
 {
+    LogEnter(__func__);
   // Get session key.
   sgx_status_t ctx, get_keys_ret;
   sgx_ra_key_128_t session_key;
@@ -1082,7 +1106,7 @@ sgx_status_t JSinterpreter(uint8_t *jscode_clump, int jscode_clump_len, uint8_t 
 
   // Split passwd_clumps.
   int AESkey_len = AESkey_clump_len - 32;  // AESkey_len should be 16 byte.
-  uint8_t enc_AESkey[AESkey_len] = {};
+  uint8_t enc_AESkey[AESkey_len];
   uint8_t iv_AESkey[12] = {};
   sgx_aes_gcm_128bit_tag_t tag_AESkey;
 
@@ -1155,6 +1179,7 @@ sgx_status_t JSinterpreter(uint8_t *jscode_clump, int jscode_clump_len, uint8_t 
 sgx_status_t GetUserID_pwhash(uint8_t *userID_clump, int userID_clump_len, uint8_t *userID, int userID_len,
 			      uint8_t *passwd_clump, int passwd_clump_len, uint8_t *pwhash)
 {
+    LogEnter(__func__);
   // Get session key.
   sgx_status_t ctx, get_keys_ret;
   sgx_ra_key_128_t session_key;
@@ -1167,7 +1192,7 @@ sgx_status_t GetUserID_pwhash(uint8_t *userID_clump, int userID_clump_len, uint8
 
 
   // Split userID_clumps.
-  uint8_t enc_userID[userID_len] = {};
+  uint8_t enc_userID[userID_len];
   uint8_t iv_userID[12] = {};
   sgx_aes_gcm_128bit_tag_t tag_userID;
 
@@ -1178,9 +1203,9 @@ sgx_status_t GetUserID_pwhash(uint8_t *userID_clump, int userID_clump_len, uint8
 
   // Split passwd_clumps.
   int passwd_len = passwd_clump_len - 32;
-  uint8_t passwd[passwd_len] = {};
+  uint8_t passwd[passwd_len];
 
-  uint8_t enc_passwd[passwd_len] = {};
+  uint8_t enc_passwd[passwd_len];
   uint8_t iv_passwd[12] = {};
   sgx_aes_gcm_128bit_tag_t tag_passwd;
 
@@ -1205,6 +1230,7 @@ sgx_status_t GetUserID_pwhash(uint8_t *userID_clump, int userID_clump_len, uint8
 
 sgx_status_t SendMessage(const char* msg_str, int msg_len)
 {
+    LogEnter(__func__);
   // Get session key.
   sgx_status_t ctx, get_keys_ret;
   sgx_ra_key_128_t session_key;
@@ -1221,14 +1247,14 @@ sgx_status_t SendMessage(const char* msg_str, int msg_len)
 
 
   // Convert type: const char* -> uint8_t.
-  uint8_t msg[msg_len] = {};
+  uint8_t msg[msg_len];
   for(int i=0; i<msg_len; i++){
     msg[i] = msg_str[i];
   }
 
 
   // Encrypt.
-  uint8_t enc_msg[msg_len] = {};
+  uint8_t enc_msg[msg_len];
   sgx_aes_gcm_128bit_tag_t tag;
   
   sgx_status_t status;
@@ -1241,7 +1267,7 @@ sgx_status_t SendMessage(const char* msg_str, int msg_len)
   
   
   // Generate send_msg.
-  uint8_t send_msg[msg_len + 32] = {};
+  uint8_t send_msg[msg_len + 32];
   memcpy(send_msg, msg_len_uint8t, 4);
   memcpy(&send_msg[4],  iv,  NONCE_SIZE);
   memcpy(&send_msg[16], tag, MAC_SIZE);

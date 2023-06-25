@@ -10,7 +10,7 @@
 
 
 #ifndef _MLfunc_SGX_hpp
-#define MLfunc_SGX_hpp
+#define _MLfunc_SGX_hpp
 
 #pragma once
 

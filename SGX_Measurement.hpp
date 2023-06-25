@@ -11,7 +11,7 @@
 
 
 #ifndef _SGX_Measurement_hpp
-#define SGX_Measurement_hpp
+#define _SGX_Measurement_hpp
 
 #pragma once
 

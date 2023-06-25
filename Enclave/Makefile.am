@@ -107,6 +107,7 @@ Enclave_SOURCES = Enclave_t.c Enclave_t.h Enclave.cpp \
 ## and SGX trusted libraries.
 
 Enclave_LDADD = @SGX_ENCLAVE_LDADD@
+Enclave_LINK= $(CXX) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
 
 ## Place any additional trusted libraries that your enclave may need in
@@ -114,7 +115,7 @@ Enclave_LDADD = @SGX_ENCLAVE_LDADD@
 ## --startgroup and --endgroup flags. (This would be where you'd add
 ## SGXSSL libraries, and your trusted c++ library
 
-SGX_EXTRA_TLIBS=-lsgx_tkey_exchange -lsgx_tcxx
+SGX_EXTRA_TLIBS=-lsgx_tkey_exchange
 
 
 ## This line is OPTIONAL, and comes with a WARNING.

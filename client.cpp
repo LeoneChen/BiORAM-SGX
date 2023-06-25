@@ -235,7 +235,7 @@ int DoActionFromMessage(ra_session_t session, uint8_t *get_msg_all)
   // Get iv, tag and ciphertext.
   sample_aes_gcm_128bit_tag_t get_tag;
   uint8_t get_iv[12] = {};  
-  uint8_t get_enc_msg[get_msg_len] = {};
+  uint8_t get_enc_msg[get_msg_len];
 
   memcpy(get_iv,      &get_msg_all[4],  12);
   memcpy(get_tag,     &get_msg_all[16], 16);
@@ -244,7 +244,7 @@ int DoActionFromMessage(ra_session_t session, uint8_t *get_msg_all)
   
   // Decrypt.
   sample_status_t dec_status;
-  uint8_t dec_msg[get_msg_len] = {};
+  uint8_t dec_msg[get_msg_len];
   dec_status = sample_rijndael128GCM_decrypt(&session.sk, get_enc_msg, get_msg_len, dec_msg, get_iv, 12, NULL, 0, &get_tag);
   
   
