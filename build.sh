@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+for ARG in "$@"
+do
+   KEY="$(echo $ARG | cut -f1 -d=)"
+   VAL="$(echo $ARG | cut -f2 -d=)"
+   export "$KEY"="$VAL"
+done
+
 SGXSDK_DIR=$(realpath ../../install)
 
 MODE=${MODE:="RELEASE"}
