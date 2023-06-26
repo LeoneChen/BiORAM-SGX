@@ -165,7 +165,7 @@ bool CheckUserInfo(MsgIO *msgio, sgx_enclave_id_t eid, unsigned char* userID_clu
   
   // Get userID(dec) and pwhash(dec + SHA256).
   sgx_status_t status;
-  uint8_t userID[userID_len] = {};
+  uint8_t userID[userID_len];
   uint8_t pwhash[32]         = {}; // pwhash should be 256 bit (32 byte).
 
   GetUserID_pwhash(eid, &status, userID_clump, userID_len + 32, userID, userID_len, passwd_clump, passwd_len + 32, pwhash);
@@ -197,7 +197,7 @@ bool CheckUserInfo(MsgIO *msgio, sgx_enclave_id_t eid, unsigned char* userID_clu
 
 
 
-int main(int argc, char *argv[])
+int __hidden_main(int argc, char *argv[])
 {
   // ***** ↓↓↓ Remote Attestation ↓↓↓ *****
   

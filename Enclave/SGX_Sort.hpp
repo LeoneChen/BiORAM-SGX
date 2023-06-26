@@ -9,7 +9,7 @@
  */
 
 #ifndef _SGX_Sort_hpp
-#define SGX_Sort_hpp
+#define _SGX_Sort_hpp
 
 #pragma once
 

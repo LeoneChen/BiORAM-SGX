@@ -29,7 +29,7 @@ AC_DEFUN([SGX_INIT],[
 	AC_ARG_WITH([sgxsdk],
 		[AS_HELP_STRING([--with-sgxsdk=path],
 			[Set the path to your Intel SGX SDK directory (defaults to auto-detection)])
-		], [SGXSDK=$withval],[SGXSDK="detect"])
+		], [SGX_SDK=$withval],[SGX_SDK=""])
 
 	AS_IF([test "x$sgxsim" = "yes"], [sgxenable=yes])
 	AS_IF([test "x$sgxenable" != "xno"],
@@ -138,14 +138,21 @@ AC_DEFUN([SGX_INIT],[
 	dnl Substitutions for building an enclave
 
 	AC_SUBST(SGX_ENCLAVE_CFLAGS,
-	 	["-nostdinc -fvisibility=hidden -fpie -ffunction-sections -fdata-sections -fstack-protector"])
+	 	["-nostdinc -fvisibility=hidden -fpie -ffunction-sections -fdata-sections -fstack-protector \
+		-fno-discard-value-names \
+		-flegacy-pass-manager \
+		-Xclang -load -Xclang \$(SGXSDK_LIBDIR)/libSGXSanPass.so \
+		-flegacy-pass-manager \
+		-Xclang -load -Xclang \$(SGXSDK_LIBDIR)/libSGXFuzzerPass.so \
+		-mllvm -instrument-json=../InstrumentStatistics.json \
+		-mllvm -at-enclave=true"])
 	AC_SUBST(SGX_ENCLAVE_CPPFLAGS, 
 		["-I\$(SGXSDK_INCDIR) -I\$(SGXSDK_INCDIR)/tlibc"])
 	AC_SUBST(SGX_ENCLAVE_CXXFLAGS, ["-nostdinc++ -fvisibility=hidden -fpie -ffunction-sections -fdata-sections -fstack-protector"])
 	AC_SUBST(SGX_ENCLAVE_LDFLAGS,
 		["-nostdlib -nodefaultlibs -nostartfiles -L\$(SGXSDK_LIBDIR)"])
 	AC_SUBST(SGX_ENCLAVE_LDADD,
-		["-Wl,--no-undefined -Wl,--whole-archive -l\$(SGX_TRTS_LIB) -Wl,--no-whole-archive -Wl,--start-group \$(SGX_EXTRA_TLIBS) -lsgx_tstdc -lsgx_tcrypto -l\$(SGX_TSERVICE_LIB) -Wl,--end-group -Wl,-Bstatic -Wl,-Bsymbolic -Wl,-pie,-eenclave_entry -Wl,--export-dynamic -Wl,--defsym,__ImageBase=0"])
+		["-Wl,--no-undefined -Wl,--whole-archive -lSGXSanRTEnclave -l\$(SGX_TRTS_LIB) -Wl,--no-whole-archive -Wl,--start-group \$(SGX_EXTRA_TLIBS) -lsgx_tstdc -lsgx_pthread -lsgx_tcrypto -l\$(SGX_TSERVICE_LIB) -Wl,--end-group -Wl,-Bstatic -Wl,-Bsymbolic -Wl,-pie,-eenclave_entry -Wl,--export-dynamic -Wl,--defsym,__ImageBase=0"])
 
 	])
 

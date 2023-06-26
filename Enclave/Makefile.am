@@ -107,6 +107,7 @@ Enclave_SOURCES = Enclave_t.c Enclave_t.h Enclave.cpp \
 ## and SGX trusted libraries.
 
 Enclave_LDADD = @SGX_ENCLAVE_LDADD@
+Enclave_LINK= $(CXX) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
 
 ## Place any additional trusted libraries that your enclave may need in

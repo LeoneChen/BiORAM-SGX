@@ -26,7 +26,6 @@ dataowner_data/chr22_GWD/
 dataowner_data/chr22_JPT/
 SGXserver_data/
 client_data/CreatePositionList.py
-*.sh
 *.log
 *.o
 *~
@@ -36,3 +35,20 @@ client_data/CreatePositionList.py
 
 Intel_SGX_Attestation_RootCA.pem
 client_data/script/
+
+*.key
+.config_*
+app
+*.so
+Enclave_u.c
+Enclave_t.c
+Enclave_u.h
+Enclave_t.h
+policy
+client
+SGXserver
+mrsigner
+Enclave.edl
+build
+*.cpio.gz
+workdir*
