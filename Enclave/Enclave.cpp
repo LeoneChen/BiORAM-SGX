@@ -113,7 +113,7 @@ public:
  */
 int printf(const char* fmt, ...)
 {
-  char buf[256] = { '\0' };
+  char buf[BUFSIZ] = { '\0' };
   va_list ap;
   va_start(ap, fmt);
   vsnprintf(buf, BUFSIZ, fmt, ap);
@@ -1073,9 +1073,11 @@ void js_dump(CScriptVar *v, void *userdata)
 
 void cp_source(void *ptr, size_t len)
 {
-    LogEnter(__func__);
-  std::string sc = (const char*)ptr;
-  printf("%s", sc.c_str());
+  LogEnter(__func__);
+  if (ptr) {
+    std::string sc = (const char*)ptr;
+    printf("%s", sc.c_str());
+  }
 }
 
 
